@@ -1,6 +1,8 @@
 <%@taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	<c:set var="context" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,7 +13,7 @@
 	<div class="content">
 		<fieldset>
 			<legend>Please Confirm Your Details</legend>
-			<br /> <a href="index">Home</a> <br /> <br /> <br />
+			<br /> <a href="${context}/index">Home</a> <br /> <br /> <br />
 			<sf:form modelAttribute="user">
 				<sf:label path="email">Email : </sf:label>${user.email}
 					

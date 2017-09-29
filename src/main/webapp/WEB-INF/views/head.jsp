@@ -1,5 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<c:set var="context" value="${pageContext.request.contextPath}" />
 
 <style>
 @import url(http://fonts.googleapis.com/css?family=Roboto);
@@ -9,6 +9,27 @@
 	right: auto !important;
 	text-align: left !important;
 	transform: translate(-30%, 0) !important;
+}
+
+.stylish-input-group .input-group-addon {
+	background: white !important;
+}
+
+.stylish-input-group .form-control {
+	border-right: 0 !important;; 
+	box-shadow: 0 0 0 !important;;
+	border-color: #ccc !important;;
+}
+
+.stylish-input-group button {
+	border: 0 !important;;
+	background: transparent !important;;
+}
+
+.aa:hover
+{
+border: 2px solid #AED6F1;
+border-radius:6px;
 }
 </style>
 
@@ -22,38 +43,61 @@
 			<div class="row">
 
 				<div class="col-sm-3" style="padding-left: 100px; padding-top: 10px">
-					<img src="<c:url value="resources/Images/FinalLogo.png" />"
+					<img src="<c:url value="/resources/Images/FinalLogo.png" />"
 						alt="No logo" />
 				</div>
 
 				<div class="col-sm-6" style="padding-top: 50px; padding-left: 100px">
-					<div id="custom-search-input">
-						<div class="input-group">
-							<input type="text" class="form-control input-lg"
-								placeholder="Which Book ?" /> <span class="input-group-btn">
-								<button class="btn btn-info btn-lg" type="button">
-									<i class="glyphicon glyphicon-search"></i>
-								</button>
-							</span>
+					<form action="${context}/search" method="get">
+						<div id="imaginary_container">
+							<div class="input-group stylish-input-group aa">
+								<input type="text" name="searchfor" class="form-control"
+									placeholder="Search" /> <span class="input-group-addon">
+									<button type="submit">
+										<span class="glyphicon glyphicon-search"></span>
+									</button>
+								</span>
+							</div>
 						</div>
-					</div>
+					</form>
 				</div>
 
 				<div class="col-sm-3">
-					<div class="dropdown" style="padding: 40px 20px 30px 110px">
+					<c:if test="${pageContext.request.userPrincipal.name != null}">
+						<h5 style="margin-left: 25%; margin-top: 5%; color: blue;">
+							<!-- display the userId just entered -->
+							Welcome ${user_firstName} ${user_lastName}
+						</h5>
+					</c:if>
+					<c:if test="${pageContext.request.userPrincipal.name == null}">
+						<h5 style="margin-left: 25%; margin-top: 5%; color: blue;">
+							<!-- display the userId just entered -->
+							Welcome to bookbag.com
+						</h5>
+					</c:if>
+					<div class="dropdown" style="padding: 15px 20px 30px 110px">
 						<button class="btn btn-default dropdown-toggle"
 							style="border-radius: 100px" type="button" id="dropdownMenu1"
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							<img src="resources/Images/user.png"
+							<img src="${context}/resources/Images/user.png"
 								style="height: 60px; width: 50px" /> <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-center"
 							aria-labelledby="dropdownMenu1">
-							<li><a href="login">Login</a></li>
-							<li><a href="registration">Sign Up</a></li>
-							<!--registration.obj  -->
-							<li role="separator" class="divider"></li>
-							<li><a href="#">Your Cart</a></li>
+							<c:if test="${pageContext.request.userPrincipal.name == null}">
+								<li><a href="${context}/login1">Login</a></li>
+								<li><a href="${context}/registration">Sign Up</a></li>
+								<!--registration.obj  -->
+								<!-- <li role="separator" class="divider"></li>
+							<li><a href="#">Your Cart</a></li>-->
+							</c:if>
+							<c:if test="${pageContext.request.userPrincipal.name != null}">
+								<li><a href="${context}/user/updateProfile">Update Profile</a></li>
+								<li><a href="${context}/user/changePassword">Change Password</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="${context}/user/usercart">Your Cart</a>
+								<li><a href="${context}/logout">Logout</a>
+							</c:if>
 						</ul>
 					</div>
 
@@ -63,9 +107,9 @@
 			</div>
 
 			<ul class="nav nav-tabs" style="margin: 20px">
-				<li>
+				<li class="active">
 					<div class="dropdown">
-						<a href="index" style="text-decoration: none">
+						<a href="${context}/index" style="text-decoration: none">
 							<h4 style="margin: 10px">Home</h4>
 						</a>
 					</div>
@@ -73,12 +117,13 @@
 				<li><div class="dropdown">
 						<a style="margin: 10px" href="textbookList"
 							class="dropdown-toggle" type="button"
-							style="text-decoration: none" data-toggle="dropdown"><h4
-								style="margin: 10px">Text Books</h4></a>
+							style="text-decoration: none" data-toggle="dropdown">
+							<h4 style="margin: 10px">Text Books</h4>
+						</a>
 						<ul class="dropdown-menu dropdown-menu-center">
 							<c:forEach items="${textbookList}" var="a">
 								<li><a class="text-capitalize"
-									href="textbooks?name=${a.category_level}">${a.category_level}</a></li>
+									href="${context}/textbooks?name=${a.category_level}">${a.category_level}</a></li>
 							</c:forEach>
 
 						</ul>
@@ -91,7 +136,7 @@
 						<ul class="dropdown-menu dropdown-menu-center">
 							<c:forEach items="${magazinesList}" var="a">
 								<li><a class="text-capitalize"
-									href="magazinesList?name=${a.category_level}">${a.category_level}</a></li>
+									href="${context}/magazinesList?name=${a.category_level}">${a.category_level}</a></li>
 							</c:forEach>
 
 						</ul>
@@ -103,7 +148,7 @@
 						<ul class="dropdown-menu dropdown-menu-center">
 							<c:forEach items="${novelList}" var="a">
 								<li><a class="text-capitalize"
-									href="novelList?name=${a.category_level}">${a.category_level}</a></li>
+									href="${context}/novelList?name=${a.category_level}">${a.category_level}</a></li>
 							</c:forEach>
 
 						</ul>
@@ -115,7 +160,7 @@
 						<ul class="dropdown-menu dropdown-menu-center">
 							<c:forEach items="${epicList}" var="a">
 								<li><a class="text-capitalize"
-									href="epicList?name=${a.category_level}">${a.category_level}</a></li>
+									href="${context}/epicList?name=${a.category_level}">${a.category_level}</a></li>
 							</c:forEach>
 
 						</ul>
@@ -123,7 +168,7 @@
 
 				<li style="float: right">
 					<div class="dropdown">
-						<a style="margin: 10px" href="AboutUs"
+						<a style="margin: 10px" href="${context}/AboutUs"
 							style="text-decoration: none">
 							<h4 style="margin: 10px">About Us</h4>
 						</a>
@@ -131,7 +176,7 @@
 				</li>
 				<li style="float: right">
 					<div class="dropdown">
-						<a style="margin: 10px" href="ContactUs"
+						<a style="margin: 10px" href="${context}/ContactUs"
 							style="text-decoration: none">
 							<h4 style="margin: 10px">Contact Us</h4>
 						</a>

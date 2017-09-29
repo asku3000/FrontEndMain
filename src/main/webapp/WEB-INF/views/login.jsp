@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="context" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,7 +27,7 @@ html, body {
 .login-container {
 	position: relative;
 	width: 300px;
-	margin: 80px auto;
+	margin: 20px auto;
 	padding: 20px 40px 40px;
 	text-align: center;
 	background: #fff;
@@ -77,17 +78,18 @@ html, body {
 <body>
 	<jsp:include page="head.jsp" />
 	<div class="container"
-		style="background: #ECEFF1; width: 100%; height: 500px; margin: 10px 0 0 0;">
+		style="background: #ECEFF1; width: 100%; height: 400px; margin: 10px 0 0 0;">
 		<div class="login-container">
-
-			<div class="avatar">
-				<img src="resources/Images/user.png"
-					style="height: 60px; width: 50px; margin: 15px auto 10px" />
+			<h3>Hey Welcome back !!</h3>
+			<div>
+				<span style="color: red;">${err}</span>
 			</div>
+
+
 			<div class="form-box">
-				<form action="" method="">
-					<input type="text" placeholder="Email" /> <input type="password"
-						placeholder="Password">
+				<form action="${context}/login" method="POST">
+					<input type="text" placeholder="Email" name="useremail" required/> <input
+						type="password" placeholder="Password" name="userpassword" required>
 					<button class="btn btn-info btn-block login" type="submit">Login</button>
 				</form>
 

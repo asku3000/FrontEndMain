@@ -16,6 +16,9 @@
 	<!-- declare mvc to be annotation driven -->
 	<mvc:annotation-driven />
 	<context:annotation-config />
+	
+	<!-- to mapp the resources folder -->
+	<mvc:resources location="/resources/" mapping="/resources/**" />
 
 	<!-- provide Your Base package to scan annotations for components -->
 	<context:component-scan base-package="com.niit.ecommerce.FrontEndMain" />
@@ -27,7 +30,8 @@
 	<webflow:flow-registry id="flowRegistry"
 		flow-builder-services="flowBuilderServices" base-path="/WEB-INF">
 		<!-- here the id is mapped to invoke this flow -->
-		<webflow:flow-location id="registrationFlow" path="/registrationFlow.xml" />
+		<webflow:flow-location id="registration"
+			path="/registrationFlow.xml" />
 	</webflow:flow-registry>
 
 	<webflow:flow-builder-services id="flowBuilderServices"

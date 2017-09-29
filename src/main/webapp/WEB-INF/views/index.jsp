@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="context" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -21,10 +23,7 @@
 <body>
 	<jsp:include page="head.jsp" />
 	<div class="container-fluid" style="margin: 40px 30px;">
-		<h2>
-			<!-- display the userId just entered -->
-			Welcome ${user.user_firstName } ${user.user_lastName }
-		</h2>
+
 		<br />
 		<div class="container">
 
@@ -106,7 +105,8 @@
 				<div class="col-sm-3">
 					<table style="margin: 15px 5px 2px 5px; border: 1px solid #AEB6BF;">
 						<tr>
-							<th><a href="#"><img src="resources/Images/cbseclass8science.png"
+							<th><a href="#"><img
+									src="resources/Images/cbseclass8science.png"
 									alt="Unable To Load" style="height: 250px; width: 100%;" /></a></th>
 						</tr>
 						<tr>
@@ -129,8 +129,9 @@
 				<div class="col-sm-3">
 					<table style="margin: 15px 5px 2px 5px; border: 1px solid #AEB6BF;">
 						<tr>
-							<th><a href="#"><img src="resources/Images/ncertclass8sst.png"
-									alt="Unable To Load" style="height: 250px; width: 100%;" /></a></th>
+							<th><a href="#"><img
+									src="resources/Images/ncertclass8sst.png" alt="Unable To Load"
+									style="height: 250px; width: 100%;" /></a></th>
 						</tr>
 						<tr>
 							<th style="padding: 3px 3px; text-align: center;">Class 8
@@ -152,7 +153,8 @@
 				<div class="col-sm-3">
 					<table style="margin: 15px 5px 2px 5px; border: 1px solid #AEB6BF;">
 						<tr>
-							<th><a href="#"><img src="resources/Images/ncertmathsclass8.png"
+							<th><a href="#"><img
+									src="resources/Images/ncertmathsclass8.png"
 									alt="Unable To Load" style="height: 250px; width: 100%;" /></a></th>
 						</tr>
 						<tr>
@@ -180,7 +182,7 @@
 
 
 	</div>
-	
+
 	<jsp:include page="footer.jsp" />
 </body>
 

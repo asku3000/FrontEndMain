@@ -19,7 +19,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <style>
-input[type=text], input[type=password], .selectgender {
+.input-xlarge,.selectgender {
 	width: 100%;
 	padding: 9px 20px;
 	margin: 8px 0;
@@ -29,7 +29,42 @@ input[type=text], input[type=password], .selectgender {
 	border-radius: 20px;
 }
 </style>
+<script>
+	function check() {
+		var password = document.getElementById("pass1").value;
+		var confirmPassword = document.getElementById("pass2").value;
+		if (password != confirmPassword) {
+			alert("Passwords do not match.");
+			return false;
+		}
+		return true;
 
+	}
+	
+	function phonenumber() {
+		 var phoneNo = document.getElementById('txtPhoneNo').value;
+
+		    if (phoneNo == "" || phoneNo == null) {
+		            alert("Please enter your Mobile No.");
+		            return false;
+		        }
+		        if (phoneNo.length < 10 || phoneNo.length > 10) {
+		            alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+		            return false;
+		            var mob = /^[1-9]{1}[0-9]{9}$/;
+		          
+		            if (mob.test(phoneNo) == false) {
+		                alert("Please enter valid mobile number.");
+		                txtMobile.focus();
+		                return false;
+		            }
+		        }
+
+		        //alert("Success ");
+		        return true;
+		        }
+	
+</script>
 </head>
 <body>
 	<jsp:include page="head.jsp" />
@@ -42,7 +77,7 @@ input[type=text], input[type=password], .selectgender {
 			<hr>
 			<sf:form modelAttribute="user">
 				<sf:label path="email">Email<span class="text-danger">*</span> :</sf:label>
-				<sf:input path="email" placeholder="xxxxxx@gmail.com" />
+				<sf:input path="email" class="input-xlarge" placeholder="xxxxxx@gmail.com" />
 				<br />
 				<!-- to display validation messages -->
 				<jstlc:forEach
@@ -57,7 +92,7 @@ input[type=text], input[type=password], .selectgender {
 
 				<sf:label path="password">Password<span
 						class="text-danger">*</span> :</sf:label>
-				<sf:password path="" />
+				<sf:password class="input-xlarge" path="" id="pass1" />
 				<br />
 				<!-- to display validation messages -->
 				<jstlc:forEach
@@ -70,7 +105,7 @@ input[type=text], input[type=password], .selectgender {
 				<hr>
 				<sf:label path="password">Repeat Password<span
 						class="text-danger">*</span> :</sf:label>
-				<sf:password path="password" />
+				<sf:password path="password" class="input-xlarge" id="pass2" onblur="return check()" />
 				<br />
 				<!-- to display validation messages -->
 				<jstlc:forEach
@@ -83,7 +118,7 @@ input[type=text], input[type=password], .selectgender {
 				<hr>
 				<sf:label path="user_firstName">First Name<span
 						class="text-danger">*</span> :</sf:label>
-				<sf:input path="user_firstName" />
+				<sf:input path="user_firstName" class="input-xlarge"/>
 
 				<br />
 				<!-- to display validation messages -->
@@ -97,7 +132,7 @@ input[type=text], input[type=password], .selectgender {
 				<hr>
 				<sf:label path="user_lastName">Last Name<span
 						class="text-danger">*</span> :</sf:label>
-				<sf:input path="user_lastName" />
+				<sf:input path="user_lastName" class="input-xlarge"/>
 				<br />
 				<!-- to display validation messages -->
 				<jstlc:forEach
@@ -110,7 +145,7 @@ input[type=text], input[type=password], .selectgender {
 				<hr>
 				<sf:label path="user_gender">Gender<span
 						class="text-danger">*</span> :</sf:label>
-				<sf:select path="user_gender" class="selectgender">
+				<sf:select path="user_gender"  class="selectgender">
 					<sf:option path="user_gender" value="null" label="I Am" />
 					<sf:option path="user_gender" value="male" label="Male" />
 					<sf:option path="user_gender" value="female" label="Female" />
@@ -127,7 +162,7 @@ input[type=text], input[type=password], .selectgender {
 				<hr>
 				<sf:label path="user_dob">Date Of Birth<span
 						class="text-danger">*</span> :</sf:label>
-				<sf:input type="date" path="user_dob" class="selectgender" />
+				<sf:input type="date" path="user_dob" class="input-xlarge" />
 				<br />
 				<!-- to display validation messages -->
 				<jstlc:forEach
@@ -139,7 +174,7 @@ input[type=text], input[type=password], .selectgender {
 				</jstlc:forEach>
 				<hr>
 				<sf:label path="address">Address<span class="text-danger">*</span> :</sf:label>
-				<sf:input path="address" placeholder="How bookbag can reach to you" />
+				<sf:input path="address" class="input-xlarge" placeholder="How bookbag can reach to you" />
 				<br />
 				<!-- to display validation messages -->
 				<jstlc:forEach
@@ -151,7 +186,8 @@ input[type=text], input[type=password], .selectgender {
 				</jstlc:forEach>
 				<hr>
 				<sf:label path="contact">Contact<span class="text-danger">*</span> :</sf:label>
-				<sf:input path="contact" placeholder="+91-xxxxxxxx" />
+				<sf:input path="contact" id="phonenumber1"
+					onblur="return phonenumber()" class="input-xlarge" placeholder="xxxxxxxx" />
 				<br />
 				<!-- to display validation messages -->
 				<jstlc:forEach
@@ -164,7 +200,7 @@ input[type=text], input[type=password], .selectgender {
 				<hr>
 				<sf:label path="user_state">State<span
 						class="text-danger">*</span> :</sf:label>
-				<sf:select name="State" path="user_state" class="selectgender">
+				<sf:select name="State" path="user_state" class="input-xlarge">
 					<sf:option value="null">State</sf:option>
 					<sf:option value="Andaman and Nicobar Islands">Andaman and
 							Nicobar Islands</sf:option>

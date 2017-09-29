@@ -80,6 +80,14 @@ public class Handler {
 
 	public String saveUser(User user) {
 		String status = "success";
+		String fname = user.getUser_firstName();
+		String lname = user.getUser_lastName();
+		fname = fname.trim();
+		fname = fname.toLowerCase();
+		lname = lname.trim();
+		lname = lname.toLowerCase();
+		user.setUser_firstName(fname);
+		user.setUser_lastName(lname);
 		user.setEnabled(true);
 		Boolean b = userDao.add(user);
 		if (b) {

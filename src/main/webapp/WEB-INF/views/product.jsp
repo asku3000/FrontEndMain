@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="context" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,29 +19,80 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+<style>
+.imgcont {
+	width: 400px;
+	height: 300px
+}
 
+.imgcont img {
+	width: 340px;
+	height: 320px;
+}
+</style>
 </head>
 <body>
 	<jsp:include page="head.jsp" />
-
-	<div class="container">
+	<c:if test="${param.productadded != null}">
+		<script>
+			alert('${param.productadded}');
+		</script>
+	</c:if>
+	<div class="container" style="margin: 20px auto 20px;">
 		<div class="row">
 			<div class="col-md-12">
 				<c:forEach items="${textbook}" var="a">
 					<div class="col-sm-6 col-md-4">
-						<div class="thumbnail">
-							<h6 class="text-center">
-								<span class="label label-info text-capitalize">${a.product_bookName}</span>
-							</h6>
-							<img src="<c:url value="${a.product_imgUrl}"/>" alt="No logo" />
-							<div class="caption">
-								<div class="row">
-									<div class="col-md-12 col-xs-12">
-										<h3>Mathematics Class 8</h3>
+						<a href="${context}/singleproduct1?name=${a.product_Id}">
+							<div class="thumbnail">
+
+								<div class="imgcont">
+									<img src="<c:url value='${a.product_imgUrl}' />"
+										alt="${a.product_imgUrl}" />
+								</div>
+								<div class="caption">
+									<div class="row">
+										<div class="col-md-12 col-xs-12">
+											<h3 class="text-capitalize">${a.product_bookName}</h3>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<p class="small">Author :- ${a.product_author}</p>
+										</div>
+										<div class="col-md-6 col-xs-6">
+											<h5 class="text-center">
+												<span class="label label-danger text-capitalize">${a.product_status}</span>
+											</h5>
+										</div>
 									</div>
 
+									<div class="row">
+										<div class="col-md-6 col-xs-6">
+											<h4>
+												<label style="text-color: blue;">&#x20B9;
+													${a.product_price}</label>
+											</h4>
+										</div>
+										<div class="col-md-6">
+											<c:if test="${a.product_quantity >0 && a.product_activeIs==true}">
+												<a href="${context}/user/product?name=${a.product_Id}"
+													class="btn btn-primary btn-product"><span
+													class="glyphicon glyphicon-shopping-cart"></span> Add To
+													Cart</a>
+											</c:if>
+											<c:if
+												test="${a.product_quantity <=0 || a.product_activeIs==false}">
+												<a href="" disabled="true" class="btn btn-primary btn-product"><span
+													class="glyphicon glyphicon-shopping-cart"></span>Out of
+													stock</a>
+											</c:if>
+										</div>
+									</div>
 								</div>
 							</div>
+						</a>
+					</div>
 				</c:forEach>
 			</div>
 		</div>
