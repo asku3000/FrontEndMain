@@ -44,9 +44,9 @@
 				</div>
 			</li>
 		</ul>
-		<c:if test="${param.msg != null}">
+		<c:if test="${param.msg1 != null}">
 			<script>
-				alert('${param.msg}');
+				alert('${param.msg1}');
 			</script>
 			<div class="container pull-center" style="margin: 100px 43% 100px;">
 				<a href="${context}/logout" class="btn btn-lg btn-info">Click
