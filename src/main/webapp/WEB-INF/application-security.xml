@@ -11,14 +11,11 @@
 	<http>
 		<intercept-url pattern="/admin/**" access="hasAuthority('admin')" />
 		<intercept-url pattern="/user/**" access="hasAuthority('CUSTOMER')" />
-		<intercept-url pattern="/supplier/**" access="hasAuthority('Supplier')" />
+		<intercept-url pattern="/supplier/**" access="hasAuthority('supplier')" />
 		<intercept-url pattern="/**" access="permitAll" />
-		<form-login 
-		login-page="/login" 
-		default-target-url="/"
-		authentication-failure-url="/login?error" 
-		username-parameter = "useremail" 
-		password-parameter = "userpassword"/>
+		<form-login login-page="/login" default-target-url="/"
+			authentication-failure-url="/login?error" username-parameter="useremail"
+			password-parameter="userpassword" />
 		<logout logout-success-url="/login?logout" />
 
 		<csrf disabled="true" />

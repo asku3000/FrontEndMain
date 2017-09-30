@@ -16,14 +16,12 @@ import com.niit.ecommerce.Backend.dao.CartItemDao;
 import com.niit.ecommerce.Backend.dao.CategoryDao;
 import com.niit.ecommerce.Backend.dao.ProductDao;
 import com.niit.ecommerce.Backend.dao.ReviewsDao;
-import com.niit.ecommerce.Backend.dao.SupplierDao;
 import com.niit.ecommerce.Backend.dao.UserDao;
 import com.niit.ecommerce.Backend.entity.Cart;
 import com.niit.ecommerce.Backend.entity.CartItem;
 import com.niit.ecommerce.Backend.entity.Category;
 import com.niit.ecommerce.Backend.entity.Product;
 import com.niit.ecommerce.Backend.entity.Reviews;
-import com.niit.ecommerce.Backend.entity.Supplier;
 import com.niit.ecommerce.Backend.entity.User;
 
 @Controller
@@ -44,9 +42,6 @@ public class AdminController {
 	CartDao cartDao;
 
 	@Autowired
-	SupplierDao supplierDao;
-
-	@Autowired
 	ReviewsDao reviewsDao;
 
 	Category category;
@@ -55,7 +50,7 @@ public class AdminController {
 	User user1;
 	Cart cart;
 	CartItem cartItem;
-	Supplier supplier;
+
 	Reviews reviews;
 
 	@RequestMapping(value = { "/admin/userenableordelete" })
@@ -98,12 +93,12 @@ public class AdminController {
 				model.addAttribute("msg", "Updated Successfully");
 				productDao.update(product);
 			} else {
-				if (product.getSupplier().isSupplier_enabled() == true) {
+				if (product.getUser().isEnabled() == true) {
 					product.setProduct_activeIs(true);
 					model.addAttribute("msg", "Updated Successfully");
 					productDao.update(product);
 				} else {
-					if (product.getSupplier().isSupplier_enabled() == false) {
+					if (product.getUser().isEnabled() == false) {
 						// product.setProduct_activeIs(true);
 						model.addAttribute("msg", "Supplier is deactivated You cant Active this product");
 						// productDao.update(product);
@@ -127,10 +122,10 @@ public class AdminController {
 			model.addAttribute("email", principal.getName());
 			model.addAttribute("user_firstName", user1.getUser_firstName());
 			model.addAttribute("user_lastName", user1.getUser_lastName());
-			supplier = supplierDao.getSupplierById(supplier_id);
-			List<Product> listProduct = productDao.getProductBySupplierId(supplier.getSupplier_id());
-			if (supplier.isSupplier_enabled() == true) {
-				supplier.setSupplier_enabled(false);
+			user = userDao.getUserById(supplier_id);
+			List<Product> listProduct = productDao.getProductBySupplierId(user.getUser_id());
+			if (user.isEnabled() == true) {
+				user.setEnabled(false);
 				model.addAttribute("msg", "Updated Successfully");
 				for (Product p : listProduct) {
 					p.setProduct_activeIs(false);
@@ -138,16 +133,16 @@ public class AdminController {
 					System.out.println(p.toString() + "hello");
 					productDao.update(p);
 				}
-				supplierDao.updateSupplier(supplier);
+				userDao.update(user);
 			} else {
-				supplier.setSupplier_enabled(true);
+				user.setEnabled(true);
 				model.addAttribute("msg", "Updated Successfully");
 				for (Product p : listProduct) {
 					p.setProduct_activeIs(true);
 					System.out.println(p.toString() + "hello");
 					productDao.update(p);
 				}
-				supplierDao.updateSupplier(supplier);
+				userDao.update(user);
 			}
 
 			return "redirect:" + refer;
@@ -175,7 +170,7 @@ public class AdminController {
 				reviews.setReview_enabled(true);
 				model.addAttribute("msg", "Updated Successfully");
 				reviewsDao.updateReviews(reviews);
-				
+
 			}
 
 			return "redirect:" + refer;

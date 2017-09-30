@@ -240,15 +240,15 @@
 								<td>${b.product_quantity}</td>
 								<td class="text-capitalize">${b.product_language}</td>
 								<td class="text-capitalize">${b.product_description}</td>
-								<td class="text-capitalize warning">${b.supplier.supplier_brandName}</td>
+								<td class="text-capitalize warning">${b.user.supplier_brandName}</td>
 								<td><c:if
-										test="${b.product_activeIs==false && b.supplier.supplier_enabled==false}">
+										test="${b.product_activeIs==false && b.user.enabled==false}">
 										<a
 											href="${context}/admin/productenableordelete?product=${b.product_Id}"
 											class="btn btn-danger disabled glyphicon glyphicon-ok">
 											Enable</a>
 									</c:if> <c:if
-										test="${b.product_activeIs==false && b.supplier.supplier_enabled==true}">
+										test="${b.product_activeIs==false && b.user.enabled==true}">
 										<a
 											href="${context}/admin/productenableordelete?product=${b.product_Id}"
 											class="btn btn-danger glyphicon glyphicon-ok"> Enable</a>
@@ -291,26 +291,26 @@
 						</thead>
 						<tbody>
 							<c:forEach items="${supplierList}" var="c">
-								<c:if test="${c.supplier_enabled==true}">
+								<c:if test="${c.enabled==true}">
 									<tr class="success">
 								</c:if>
-								<c:if test="${c.supplier_enabled==false}">
+								<c:if test="${c.enabled==false}">
 									<tr class="danger">
 								</c:if>
-								<td>${c.supplier_id}</td>
+								<td>${c.user_id}</td>
 								<td class="text-capitalize">${c.supplier_companyName}</td>
-								<td class="text-capitalize">${c.supplier_brandName}</td>
-								<td>${c.supplier_email}</td>
-								<td>${c.supplier_phoneNo}</td>
-								<td class="text-capitalize">${c.supplier_address}</td>
-								<td><c:if test="${c.supplier_enabled==true}">
+								<td class="text-capitalize warning">${c.supplier_brandName}</td>
+								<td>${c.email}</td>
+								<td>${c.contact}</td>
+								<td class="text-capitalize">${c.address}</td>
+								<td><c:if test="${c.enabled==true}">
 										<a
-											href="${context}/admin/supplierenableordelete?supplier=${c.supplier_id}"
+											href="${context}/admin/supplierenableordelete?supplier=${c.user_id}"
 											class="btn btn-danger glyphicon glyphicon-remove">
 											Disable</a>
-									</c:if> <c:if test="${c.supplier_enabled==false}">
+									</c:if> <c:if test="${c.enabled==false}">
 										<a
-											href="${context}/admin/supplierenableordelete?supplier=${c.supplier_id}"
+											href="${context}/admin/supplierenableordelete?supplier=${c.user_id}"
 											class="btn btn-success glyphicon glyphicon-ok"> Enable</a>
 									</c:if></td>
 								</tr>

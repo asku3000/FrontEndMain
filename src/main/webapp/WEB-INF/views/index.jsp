@@ -17,7 +17,17 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+.imgcont {
+	width: 400px;
+	height: 300px
+}
 
+.imgcont img {
+	width: 340px;
+	height: 320px;
+}
+</style>
 
 </head>
 <body>
@@ -88,98 +98,71 @@
 			</div>
 		</div>
 
-		<div class="container"
-			style="height: 340px; width: 100%; background: #F8F9F9; margin: 40px 50px 40px 25px;">
+		<div class="container" style="margin-top: 30px;">
+			<h2>Trending Products</h2>
+			<hr>
 			<div class="row">
-				<div class="col-sm-3">
-					<table style="margin: 40px 40px;">
-						<tr>
-							<th style="padding: 20px 20px 20px 20px;"><h2>New Books</h2></th>
-						</tr>
-						<tr style="margin-left: 10px;">
-							<th style="margin-left: 10px; padding: 20px 20px 20px 20px;"><a
-								href="#" class="btn btn-primary" role="button">View All</a>
-					</table>
+				<div class="col-md-12">
+					<c:forEach items="${reviewlist}" var="a">
+						<div class="col-sm-6 col-md-4">
+							<a href="${context}/singleproduct1?name=${a.product.product_Id}">
+								<div class="thumbnail">
+
+									<div class="imgcont">
+										<img src="<c:url value='${a.product.product_imgUrl}' />"
+											alt="${a.product.product_imgUrl}" />
+									</div>
+									<div class="caption">
+										<div class="row">
+											<div class="col-md-12 col-xs-12">
+												<h3 class="text-capitalize">${a.product.product_bookName}</h3>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6 col-xs-6">
+												<p class="small">Author :- ${a.product.product_author}</p>
+											</div>
+											<div class="col-md-6 col-xs-6">
+												<h5 class="text-center">
+													<span class="label label-danger text-capitalize">${a.product.product_status}</span>
+												</h5>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-6 col-xs-6">
+												<h4>
+													<label style="text-color: blue;">&#x20B9;
+														${a.product.product_price}</label>
+												</h4>
+											</div>
+											<div class="col-md-6">
+												<c:if
+													test="${a.product.product_quantity >0 && a.product.product_activeIs==true}">
+													<a
+														href="${context}/user/product?name=${a.product.product_Id}"
+														class="btn btn-primary btn-product"><span
+														class="glyphicon glyphicon-shopping-cart"></span> Add To
+														Cart</a>
+												</c:if>
+												<c:if
+													test="${a.product.product_quantity <=0 || a.product.product_activeIs==false}">
+													<a href="" disabled="true"
+														class="btn btn-primary btn-product"><span
+														class="glyphicon glyphicon-shopping-cart"></span>Out of
+														stock</a>
+												</c:if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</c:forEach>
 				</div>
-
-				<div class="col-sm-3">
-					<table style="margin: 15px 5px 2px 5px; border: 1px solid #AEB6BF;">
-						<tr>
-							<th><a href="#"><img
-									src="resources/Images/cbseclass8science.png"
-									alt="Unable To Load" style="height: 250px; width: 100%;" /></a></th>
-						</tr>
-						<tr>
-							<th style="padding: 3px 3px; text-align: center;">Class 8
-								Science</th>
-						</tr>
-						<tr>
-							<th style="padding: 3px 3px; text-align: center;">Publisher:
-								Zankar</th>
-						</tr>
-						<tr>
-							<th
-								style="padding: 3px 3px; text-align: center; text_color: blue;">&#x20B9;
-								220</th>
-						</tr>
-
-					</table>
-				</div>
-
-				<div class="col-sm-3">
-					<table style="margin: 15px 5px 2px 5px; border: 1px solid #AEB6BF;">
-						<tr>
-							<th><a href="#"><img
-									src="resources/Images/ncertclass8sst.png" alt="Unable To Load"
-									style="height: 250px; width: 100%;" /></a></th>
-						</tr>
-						<tr>
-							<th style="padding: 3px 3px; text-align: center;">Class 8
-								Social Science</th>
-						</tr>
-						<tr>
-							<th style="padding: 3px 3px; text-align: center;">Publisher:
-								NCERT</th>
-						</tr>
-						<tr>
-							<th
-								style="padding: 3px 3px; text-align: center; text_color: blue;">&#x20B9;
-								200</th>
-						</tr>
-
-					</table>
-				</div>
-
-				<div class="col-sm-3">
-					<table style="margin: 15px 5px 2px 5px; border: 1px solid #AEB6BF;">
-						<tr>
-							<th><a href="#"><img
-									src="resources/Images/ncertmathsclass8.png"
-									alt="Unable To Load" style="height: 250px; width: 100%;" /></a></th>
-						</tr>
-						<tr>
-							<th style="padding: 3px 3px; text-align: center;">Class 11
-								Mathematics</th>
-						</tr>
-						<tr>
-							<th style="padding: 3px 3px; text-align: center;">Publisher:
-								NCERT</th>
-						</tr>
-						<tr>
-							<th
-								style="padding: 3px 3px; text-align: center; text_color: blue;">&#x20B9;
-								150</th>
-						</tr>
-
-					</table>
-				</div>
-
-
 			</div>
+
 		</div>
-
-
-
 
 	</div>
 

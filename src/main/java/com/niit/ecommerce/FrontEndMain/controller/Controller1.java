@@ -3,6 +3,7 @@ package com.niit.ecommerce.FrontEndMain.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,14 +20,12 @@ import com.niit.ecommerce.Backend.dao.CartItemDao;
 import com.niit.ecommerce.Backend.dao.CategoryDao;
 import com.niit.ecommerce.Backend.dao.ProductDao;
 import com.niit.ecommerce.Backend.dao.ReviewsDao;
-import com.niit.ecommerce.Backend.dao.SupplierDao;
 import com.niit.ecommerce.Backend.dao.UserDao;
 import com.niit.ecommerce.Backend.entity.Cart;
 import com.niit.ecommerce.Backend.entity.CartItem;
 import com.niit.ecommerce.Backend.entity.Category;
 import com.niit.ecommerce.Backend.entity.Product;
 import com.niit.ecommerce.Backend.entity.Reviews;
-import com.niit.ecommerce.Backend.entity.Supplier;
 import com.niit.ecommerce.Backend.entity.User;
 
 @Controller
@@ -34,9 +33,6 @@ public class Controller1 {
 
 	@Autowired
 	CategoryDao categoryDao;
-
-	@Autowired
-	SupplierDao supplierDao;
 
 	@Autowired
 	ProductDao productDao;
@@ -68,8 +64,22 @@ public class Controller1 {
 			User user = userDao.getUserByUsername(principal.getName());
 			if (user.getRole().equalsIgnoreCase("Admin")) {
 				List<Product> productList = productDao.getAllProductList();
-				List<User> userList = userDao.getAllUsers();
-				List<Supplier> supplierList = supplierDao.getAllSupplier();
+				List<User> userList1 = userDao.getAllUsers();
+				List<User> userList = new ArrayList<User>();
+				for (User u : userList1) {
+					if (u.getRole().equalsIgnoreCase("customer")) {
+						userList.add(u);
+					}
+
+				}
+				List<User> supplierList = new ArrayList<User>();
+				for (User u : userList1) {
+					if (u.getRole().equalsIgnoreCase("supplier")) {
+						supplierList.add(u);
+					}
+
+				}
+				// List<Supplier> supplierList = supplierDao.getAllSupplier();
 				List<Reviews> reviewsList = reviewsDao.getAllReviews();
 				model.addAttribute("email", principal.getName());
 				model.addAttribute("user_firstName", user.getUser_firstName());
@@ -82,7 +92,16 @@ public class Controller1 {
 				return "admin/index";
 			} else if (user.getRole().equalsIgnoreCase("Customer")) {
 				if (user.isEnabled() && user.getUser_status() == 1) {
-
+					List<Reviews> list = reviewsDao.getAllReviews();
+					List<Reviews> list1 = new ArrayList<Reviews>();
+					for (Reviews r : list) {
+						if (r.isReview_enabled() == true) {
+							if (r.getReview_stars() > 3) {
+								list1.add(r);
+							}
+						}
+					}
+					model.addAttribute("reviewlist", list1);
 					model.addAttribute("email", principal.getName());
 					model.addAttribute("user_firstName", user.getUser_firstName());
 					model.addAttribute("user_lastName", user.getUser_lastName());
@@ -92,8 +111,25 @@ public class Controller1 {
 					model.addAttribute("user_lastName", user.getUser_lastName());
 					return "user/activatemyaccount";
 				}
+			} else {
+				if (user.getRole().equalsIgnoreCase("supplier")) {
+					return "supplier/index";
+				}
+
 			}
+		} else {
+			List<Reviews> list = reviewsDao.getAllReviews();
+			List<Reviews> list1 = new ArrayList<Reviews>();
+			for (Reviews r : list) {
+				if (r.isReview_enabled() == true) {
+					if (r.getReview_stars() > 3) {
+						list1.add(r);
+					}
+				}
+			}
+			model.addAttribute("reviewlist", list1);
 		}
+
 		return "index";
 	}
 
@@ -220,7 +256,7 @@ public class Controller1 {
 				list1 = new ArrayList<Reviews>();
 				for (Reviews r : list) {
 					if (r.isReview_enabled() == true) {
-						
+
 						list1.add(r);
 						totalReview = totalReview + r.getReview_stars();
 						averagelistlength = averagelistlength + 1;
@@ -265,7 +301,7 @@ public class Controller1 {
 				list1 = new ArrayList<Reviews>();
 				for (Reviews r : list) {
 					if (r.isReview_enabled() == true) {
-						
+
 						list1.add(r);
 						totalReview = totalReview + r.getReview_stars();
 						averagelistlength = averagelistlength + 1;

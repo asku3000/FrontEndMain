@@ -96,7 +96,7 @@
 						<h2 class="product-price">&#x20B9; ${product.product_price}</h2>
 					</div>
 					<div class="col-md-8">
-						<h3>Sold by :- ${product.supplier.supplier_brandName}</h3>
+						<h3>Sold by :- ${product.user.supplier_brandName}</h3>
 					</div>
 					<!-- end row -->
 
