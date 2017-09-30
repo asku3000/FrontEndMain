@@ -51,8 +51,9 @@
 					<form action="${context}/search" method="get">
 						<div id="imaginary_container">
 							<div class="input-group stylish-input-group aa">
-								<input type="text" disabled name="searchfor" class="form-control"
-									placeholder="Search" /> <span class="input-group-addon">
+								<input type="text" disabled name="searchfor"
+									class="form-control" placeholder="Search" /> <span
+									class="input-group-addon">
 									<button type="submit" disabled>
 										<span class="glyphicon glyphicon-search"></span>
 									</button>
@@ -95,6 +96,7 @@
 
 								<li><a href="${context}/admin/changePassword">Change
 										Password</a></li>
+								<li><a href="${context}/admin/uploadProducts">Upload Products</a></li>
 								<li role="separator" class="divider"></li>
 
 								<li><a href="${context}/logout">Logout</a>

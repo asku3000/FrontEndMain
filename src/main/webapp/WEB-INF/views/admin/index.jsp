@@ -39,6 +39,7 @@
 		<li><a href="#User" data-toggle="tab">User</a></li>
 		<li><a href="#Product" data-toggle="tab">Product</a></li>
 		<li><a href="#Supplier" data-toggle="tab">Supplier</a></li>
+		<li><a href="#Reviews" data-toggle="tab">Reviews</a></li>
 	</ul>
 
 	<div id="myTabContent" class="tab-content">
@@ -72,6 +73,13 @@
 									<br>
 									<li><h4>
 											Enable or Disable<span
+												style="text-decoration: none; color: #311B92;">
+												Product</span>
+										</h4></li>
+									<br>
+									<br>
+									<li><h4>
+											Upload or Edit<span
 												style="text-decoration: none; color: #311B92;">
 												Product</span>
 										</h4></li>
@@ -168,9 +176,20 @@
 		</div>
 		<div class="tab-pane fade" id="Product">
 			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<h3>
+							Upload Your Products <span
+								class="glyphicon glyphicon-arrow-right"></span>
+						</h3>
+						<a href="${context}/admin/uploadProducts"><span
+							class="pull-right btn btn-primary glyphicon glyphicon-arrow-up">
+								Upload Products</span></a>
+					</div>
+				</div>
 				<h2>Product Table</h2>
 				<br>
-				<p>Enable or disable the Product</p>
+				<p>Enable or disable the Product from this table</p>
 				<br> <br>
 				<div class="table-responsive">
 					<table class="table table-hover table-bordered">
@@ -301,7 +320,58 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<jsp:include page="footer.jsp" />
+
+		<div class="tab-pane fade" id="Reviews">
+			<div class="container-fluid">
+				<h2>Reviews Table</h2>
+				<br>
+				<p>Enable or disable the Reviews</p>
+				<br> <br>
+				<div class="table-responsive">
+					<table class="table table-hover table-bordered">
+						<thead>
+							<tr>
+								<th>Review Id</th>
+								<th>Book Name</th>
+								<th>Author</th>
+								<th>User Email</th>
+								<th>Rating</th>
+								<th>Review</th>
+								<th>Status</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${reviewsList}" var="d">
+								<c:if test="${d.review_enabled==true}">
+									<tr class="success">
+								</c:if>
+								<c:if test="${d.review_enabled==false}">
+									<tr class="danger">
+								</c:if>
+								<td>${d.review_id}</td>
+								<td class="text-capitalize">${d.product.product_bookName}</td>
+								<td class="text-capitalize">${d.product.product_author}</td>
+								<td>${d.user.email}</td>
+								<td>${d.review_stars}</td>
+								<td class="text-capitalize">${d.review_message}</td>
+								<td><c:if test="${d.review_enabled==true}">
+										<a
+											href="${context}/admin/reviewEnableorDelete?review_id=${d.review_id}"
+											class="btn btn-danger glyphicon glyphicon-remove">
+											Disable</a>
+									</c:if> <c:if test="${d.review_enabled==false}">
+										<a
+											href="${context}/admin/reviewEnableorDelete?review_id=${d.review_id}"
+											class="btn btn-success glyphicon glyphicon-ok"> Enable</a>
+									</c:if></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<jsp:include page="footer.jsp" />
 </body>
 </html>

@@ -42,9 +42,61 @@
 	width: 350px;
 	height: 470px;
 }
+
+.rating-block {
+	background-color: #FAFAFA;
+	border: 1px solid #EFEFEF;
+	padding: 15px 15px 20px 15px;
+	border-radius: 3px;
+	margin: 50px auto 20px;
+}
+
+.review-block {
+	background-color: #FAFAFA;
+	border: 1px solid #EFEFEF;
+	padding: 10px;
+	border-radius: 3px;
+	margin-bottom: 5px;
+}
+
+.review-block-name {
+	font-size: 12px;
+	margin: 10px 0;
+}
+
+.review-block-rate {
+	font-size: 13px;
+	margin-bottom: 15px;
+}
+
+.review-block-description {
+	font-size: 13px;
+}
+
+.input-xlarge {
+	width: 100%;
+	padding: 9px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	border-radius: 20px;
+}
 </style>
 </head>
 <body>
+	<script>
+		function checkReviewField() {
+			var a = document.getElementById("reviewField").value;
+			var b = document.getElementById("starsValue").value;
+			if (a == "") {
+				alert("Review Field Cannot Be Empty");
+			}
+			if (b == "null") {
+				alert("Please give The Stars");
+			}
+		}
+	</script>
 	<jsp:include page="head.jsp" />
 
 	<div class="container" id="product-section">
@@ -144,38 +196,167 @@
 										${product.product_quantity}</span>
 								</h4>
 							</c:if>
-							<c:if
-								test="${product.product_activeIs==false}">
+							<c:if test="${product.product_activeIs==false}">
 								<h4>
 									<span class="label label-success">Product Disabled</span>
 								</h4>
 							</c:if>
-							<c:if
-								test="${product.product_quantity <=0}">
+							<c:if test="${product.product_quantity <=0}">
 								<h4>
 									<span class="label label-success">Not Available</span>
 								</h4>
-								</c:if>
+							</c:if>
 						</div>
 					</div>
 					<!-- end row -->
-
-
 					<div class="row">
-						<div class="col-md-12 top-10">
-							<p>
-								To order by telephone, <a href="tel:18005551212">please call
-									1-800-555-1212</a>
-							</p>
+						<div class="col-sm-12">
+							<div class="rating-block">
+								<h4>Average user rating</h4>
+								<h2 class="bold padding-bottom-7">
+									${average} <small>/ 5</small>
+								</h2>
+								<c:forEach begin="1" end="${average1}" var="i">
+									<button type="button" class="btn btn-primary btn-sm"
+										aria-label="Left Align">
+										<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+									</button>
+								</c:forEach>
+								<c:forEach begin="1" end='${average2}' var="a">
+									<button type="button" class="btn btn-default btn-grey btn-sm"
+										aria-label="Left Align">
+										<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+									</button>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
+
+
 					<!-- end row -->
 
 				</div>
 			</div>
 		</div>
 		<!-- end row -->
+		<div class="row">
+			<ul class="nav nav-tabs" style="margin-top: 10px;">
+				<li class="active"><a href="" data-toggle="tab">Reviews</a></li>
+
+			</ul>
+
+
+			<div class="col-md-3">
+				<h4>
+					Give Your Review &nbsp;&nbsp;<span
+						class="glyphicon glyphicon-arrow-right"></span>
+				</h4>
+			</div>
+			<div class="col-md-9">
+				<div class="row">
+					<form action="${context}/user/giveReviewPageController"
+						method="get">
+						<input type="hidden" name="product_id"
+							value="${product.product_Id}" />
+						<div class="col-md-8">
+							<input type="text" class="input-xlarge" name="review_message"
+								placeholder="Type Review Here" id="reviewField"
+								onblur="checkReviewField()" />
+						</div>
+						<div class="col-md-2">
+							<select name="review_stars" id="starsValue" class="input-xlarge">
+								<option selected value="null">Stars</option>
+
+								<option value="1">1</option>
+
+								<option value="2">2</option>
+
+								<option value="3">3</option>
+
+								<option value="4">4</option>
+
+								<option value="5">5</option>
+							</select>
+						</div>
+						<div class="col-md-2">
+							<c:if
+								test="${product.product_activeIs==false && reviewButton==0}">
+								<button type="submit" disabled="true"
+									class="btn btn-lg btn-primary pull-right">Give Review</button>
+							</c:if>
+							<c:if test="${product.product_activeIs==true && reviewButton==1}">
+								<button type="submit" class="btn btn-lg btn-primary pull-right">
+									Give Review</button>
+							</c:if>
+							<c:if test="${login==1}">
+								<h4>Login To Review</h4>
+							</c:if>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Reviews</h3>
+			</div>
+			<div class="col-md-6">
+				<a href="${context}/user/editMyreview?product_id=${product.product_Id}"><span class="btn btn-danger pull-right glyphicon glyphicon-pencil"> Edit Your Review</span></a>
+			</div>
+
+		</div>
+		<c:forEach items="${reviewsList}" var="reviewsList">
+			<div class="row">
+				<div class="col-sm-12">
+					<hr />
+
+					<div class="review-block">
+						<div class="row">
+							<div class="col-sm-3">
+
+								<div class="review-block-name">
+									<h4 class="text-capitalize">${reviewsList.user.user_firstName}
+										${reviewsList.user.user_lastName}</h4>
+								</div>
+
+							</div>
+							<div class="col-sm-9">
+								<div class="review-block-rate">
+									<c:forEach begin="1" end='${reviewsList.review_stars}' var="i">
+
+										<button type="button" style="margin-left: 2px;"
+											class="btn btn-info btn-xs pull-left" aria-label="Left Align">
+											<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+										</button>
+									</c:forEach>
+									<c:forEach begin="1" end='${5-reviewsList.review_stars}'
+										var="i">
+
+										<button type="button" class="btn btn-grey btn-xs pull-left"
+											style="margin-left: 2px;" aria-label="Left Align">
+											<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+										</button>
+									</c:forEach>
+								</div>
+								<div class="row">
+									<div class="col-sm-12" style="margin-top: 10px;">
+										<div class="review-block-description pull-left">${reviewsList.review_message}</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</c:forEach>
+
 	</div>
+
+
+
 	<!-- end container -->
 
 	<jsp:include page="footer.jsp" />

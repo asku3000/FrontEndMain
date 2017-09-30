@@ -1,6 +1,7 @@
 package com.niit.ecommerce.FrontEndMain.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +18,14 @@ import com.niit.ecommerce.Backend.dao.CartDao;
 import com.niit.ecommerce.Backend.dao.CartItemDao;
 import com.niit.ecommerce.Backend.dao.CategoryDao;
 import com.niit.ecommerce.Backend.dao.ProductDao;
+import com.niit.ecommerce.Backend.dao.ReviewsDao;
 import com.niit.ecommerce.Backend.dao.SupplierDao;
 import com.niit.ecommerce.Backend.dao.UserDao;
 import com.niit.ecommerce.Backend.entity.Cart;
 import com.niit.ecommerce.Backend.entity.CartItem;
 import com.niit.ecommerce.Backend.entity.Category;
 import com.niit.ecommerce.Backend.entity.Product;
+import com.niit.ecommerce.Backend.entity.Reviews;
 import com.niit.ecommerce.Backend.entity.Supplier;
 import com.niit.ecommerce.Backend.entity.User;
 
@@ -47,11 +50,15 @@ public class Controller1 {
 	@Autowired
 	CartDao cartDao;
 
+	@Autowired
+	ReviewsDao reviewsDao;
+
 	Category category;
 	Product product;
 	User user;
 	Cart cart;
 	CartItem cartItem;
+	Reviews reviews;
 
 	@RequestMapping(value = { "/", "/index", "/home" })
 	public String index(Principal principal, Model model) {
@@ -63,12 +70,14 @@ public class Controller1 {
 				List<Product> productList = productDao.getAllProductList();
 				List<User> userList = userDao.getAllUsers();
 				List<Supplier> supplierList = supplierDao.getAllSupplier();
+				List<Reviews> reviewsList = reviewsDao.getAllReviews();
 				model.addAttribute("email", principal.getName());
 				model.addAttribute("user_firstName", user.getUser_firstName());
 				model.addAttribute("user_lastName", user.getUser_lastName());
 				model.addAttribute("productList", productList);
 				model.addAttribute("userList", userList);
 				model.addAttribute("supplierList", supplierList);
+				model.addAttribute("reviewsList", reviewsList);
 
 				return "admin/index";
 			} else if (user.getRole().equalsIgnoreCase("Customer")) {
@@ -192,13 +201,91 @@ public class Controller1 {
 
 	// ------------------controller for going to single product
 	// page------------------
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = { "/singleproduct1" })
 	public String getsingleproduct(@RequestParam("name") Long product_id, Principal principal, Model map) {
 		product = productDao.getProductById((Long) product_id);
 		if (principal != null) {
-			User user = userDao.getUserByUsername(principal.getName());
+			user = userDao.getUserByUsername(principal.getName());
 			map.addAttribute("user_firstName", user.getUser_firstName());
 			map.addAttribute("user_lastName", user.getUser_lastName());
+
+			// product = productDao.getProductById((long) 35);
+			if (product.isProduct_activeIs() == true) {
+				List<Reviews> list = reviewsDao.getAllReviewsByProductId(product);
+				int listlength = list.size();
+				float totalReview = 0;
+				int averagelistlength = 0;
+				List<Reviews> list1 = null;
+				list1 = new ArrayList<Reviews>();
+				for (Reviews r : list) {
+					if (r.isReview_enabled() == true) {
+						
+						list1.add(r);
+						totalReview = totalReview + r.getReview_stars();
+						averagelistlength = averagelistlength + 1;
+						System.out.println("Hello :" + r.toString());
+						map.addAttribute("reviewsList", list1);
+					}
+				}
+				// map.addAttribute("reviewsList", list1);
+				for (Reviews c : list1) {
+					System.out.println("List :" + c.toString());
+				}
+				System.out.println("Hello :" + averagelistlength);
+				totalReview /= averagelistlength;
+				System.out.println("totalReview" + totalReview);
+				int TotalReview = Math.round(totalReview);
+				System.out.println("total average: " + TotalReview);
+				int diff = 5 - TotalReview;
+				reviews = reviewsDao.getReviewsByUserAndProduct(product, user);
+				int i = 1;
+				int a = 1;
+				map.addAttribute("average", totalReview);
+				map.addAttribute("average1", TotalReview);
+				map.addAttribute("average2", diff);
+				if (reviews != null) {
+					i = 0;
+					a = 0;
+					map.addAttribute("editButton", a);
+					map.addAttribute("reviewButton", i);
+				} else {
+					map.addAttribute("reviewButton", i);
+				}
+			}
+		} else {
+			user = new User();
+			int c = 1;
+			if (product.isProduct_activeIs() == true) {
+				List<Reviews> list = reviewsDao.getAllReviewsByProductId(product);
+				int listlength = list.size();
+				float totalReview = 0;
+				int averagelistlength = 0;
+				List<Reviews> list1 = null;
+				list1 = new ArrayList<Reviews>();
+				for (Reviews r : list) {
+					if (r.isReview_enabled() == true) {
+						
+						list1.add(r);
+						totalReview = totalReview + r.getReview_stars();
+						averagelistlength = averagelistlength + 1;
+						System.out.println("Hello :" + r.toString());
+					}
+				}
+				map.addAttribute("reviewsList", list1);
+
+				System.out.println("Hello :" + averagelistlength);
+				totalReview /= averagelistlength;
+				System.out.println("totalReview" + totalReview);
+				int TotalReview = Math.round(totalReview);
+				System.out.println("total average: " + TotalReview);
+				int diff = 5 - TotalReview;
+				map.addAttribute("average", totalReview);
+				map.addAttribute("average1", TotalReview);
+				map.addAttribute("average2", diff);
+				map.addAttribute("login", c);
+			}
+
 		}
 
 		map.addAttribute("product", product);
@@ -561,4 +648,108 @@ public class Controller1 {
 		}
 		return "user/index";
 	}
+
+	@RequestMapping(value = { "/user/giveReviewPageController" })
+	public String giveReviewPage(@RequestParam("product_id") Long product_id,
+			@RequestParam("review_stars") int review_stars, @RequestParam("review_message") String review_message,
+			Principal principal, Model map, HttpServletRequest request) {
+		String refer = request.getHeader("Referer");
+		if (principal != null) {
+
+			user = userDao.getUserByUsername(principal.getName());
+
+			String refer1 = request.getHeader("Referer");
+			map.addAttribute("email", principal.getName());
+			map.addAttribute("user_firstName", user.getUser_firstName());
+			map.addAttribute("user_lastName", user.getUser_lastName());
+			if (user.getUser_status() == 1) {
+				product = productDao.getProductById((Long) product_id);
+				System.out.println("product hello" + product.getProduct_bookName());
+				reviews = reviewsDao.getReviewsByUserAndProduct(product, user);
+				if (reviews == null) {
+					reviews = new Reviews();
+					reviews.setReview_stars(review_stars);
+					reviews.setReview_message(review_message);
+					reviews.setUser(user);
+					reviews.setProduct(product);
+					map.addAttribute("user", user);
+					map.addAttribute("product", product);
+					reviewsDao.addReviews(reviews);
+					map.addAttribute("msg", "Updated Successfully");
+					return "redirect:" + refer1;
+				}
+
+			}
+
+		}
+		return "redirect:" + refer;
+	}
+
+	@RequestMapping(value = { "/user/editMyreview" })
+	public String giveeditReviewPage(@RequestParam("product_id") Long product_id, Principal principal, Model map,
+			HttpServletRequest request) {
+
+		if (principal != null) {
+
+			user = userDao.getUserByUsername(principal.getName());
+
+			// String refer = request.getHeader("Referer");
+			map.addAttribute("email", principal.getName());
+			map.addAttribute("user_firstName", user.getUser_firstName());
+			map.addAttribute("user_lastName", user.getUser_lastName());
+			if (user.getUser_status() == 1) {
+				product = productDao.getProductById((Long) product_id);
+				reviews = reviewsDao.getReviewsByUserAndProduct(product, user);
+				if (reviews == null) {
+					map.addAttribute("reviewsnull", "You Didn't review this product ,Please add a new one !!!");
+					map.addAttribute("reviews", reviews);
+					return "user/editreview";
+				} else {
+					// map.addAttribute("reviewsnull","You Didn't review this
+					// product ,Please add a new one !!!");
+					map.addAttribute("reviews", reviews);
+					return "user/editreview";
+				}
+
+			}
+			return "user/activatemyaccount";
+
+		}
+		return null;
+
+	}
+
+	@RequestMapping(value = { "/user/giveReviewPageController1" })
+	public String updateReview(@RequestParam("product_id") Long product_id,
+			@RequestParam("review_stars") int review_stars, @RequestParam("review_message") String review_message,
+			Principal principal, Model map, HttpServletRequest request) {
+		String refer = request.getHeader("Referer");
+		if (principal != null) {
+
+			user = userDao.getUserByUsername(principal.getName());
+
+			String refer1 = request.getHeader("Referer");
+			map.addAttribute("email", principal.getName());
+			map.addAttribute("user_firstName", user.getUser_firstName());
+			map.addAttribute("user_lastName", user.getUser_lastName());
+			if (user.getUser_status() == 1) {
+				product = productDao.getProductById((Long) product_id);
+				reviews = reviewsDao.getReviewsByUserAndProduct(product, user);
+
+				reviews.setReview_stars(review_stars);
+				reviews.setReview_message(review_message);
+				reviews.setUser(user);
+				reviews.setProduct(product);
+				map.addAttribute("user", user);
+				map.addAttribute("product", product);
+				reviewsDao.updateReviews(reviews);
+				map.addAttribute("msg", "Updated Successfully");
+				return "redirect:" + refer1;
+
+			}
+
+		}
+		return "redirect:" + refer;
+	}
+
 }
