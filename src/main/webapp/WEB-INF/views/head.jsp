@@ -16,7 +16,7 @@
 }
 
 .stylish-input-group .form-control {
-	border-right: 0 !important;; 
+	border-right: 0 !important;;
 	box-shadow: 0 0 0 !important;;
 	border-color: #ccc !important;;
 }
@@ -26,10 +26,9 @@
 	background: transparent !important;;
 }
 
-.aa:hover
-{
-border: 2px solid #AED6F1;
-border-radius:6px;
+.aa:hover {
+	border: 2px solid #AED6F1;
+	border-radius: 6px;
 }
 </style>
 
@@ -92,8 +91,10 @@ border-radius:6px;
 							<li><a href="#">Your Cart</a></li>-->
 							</c:if>
 							<c:if test="${pageContext.request.userPrincipal.name != null}">
-								<li><a href="${context}/user/updateProfile">Update Profile</a></li>
-								<li><a href="${context}/user/changePassword">Change Password</a></li>
+								<li><a href="${context}/user/updateProfile">Update
+										Profile</a></li>
+								<li><a href="${context}/user/changePassword">Change
+										Password</a></li>
 								<li role="separator" class="divider"></li>
 								<li><a href="${context}/user/usercart">Your Cart</a>
 								<li><a href="${context}/logout">Logout</a>
@@ -184,7 +185,8 @@ border-radius:6px;
 				</li>
 				<li style="float: right">
 					<div class="dropdown">
-						<a style="margin: 10px" href="index" style="text-decoration: none">
+						<a style="margin: 10px" href="${context}/supplierdecide1"
+							style="text-decoration: none">
 							<h4 style="margin: 10px">Sell With Us</h4>
 						</a>
 					</div>

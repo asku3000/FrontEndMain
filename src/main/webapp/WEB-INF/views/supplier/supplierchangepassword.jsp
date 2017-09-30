@@ -22,6 +22,7 @@
 
 </head>
 <body>
+
 	<script>
 		function check2() {
 
@@ -68,7 +69,7 @@
 					<p class="text-center">Use the form below to change your
 						password.</p>
 					<br> <br> <br>
-					<form action="${context}/admin/changePassword2" method="post"
+					<form action="${context}/supplier/changePassword2" method="post"
 						id="passwordForm">
 						<div>
 							<h3 id="print" class="text-danger" style=""></h3>
@@ -89,6 +90,6 @@
 			<!--/row-->
 		</c:if>
 	</div>
-	<jsp:include page="/WEB-INF/views/footer.jsp" />
+	<jsp:include page="footer.jsp" />
 </body>
 </html>

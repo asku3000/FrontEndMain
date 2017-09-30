@@ -3,7 +3,6 @@ package com.niit.ecommerce.FrontEndMain.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -61,7 +60,7 @@ public class Controller1 {
 
 		if (principal != null) {
 
-			User user = userDao.getUserByUsername(principal.getName());
+			user = userDao.getUserByUsername(principal.getName());
 			if (user.getRole().equalsIgnoreCase("Admin")) {
 				List<Product> productList = productDao.getAllProductList();
 				List<User> userList1 = userDao.getAllUsers();
@@ -106,18 +105,22 @@ public class Controller1 {
 					model.addAttribute("user_firstName", user.getUser_firstName());
 					model.addAttribute("user_lastName", user.getUser_lastName());
 					return "user/index";
-				} else {
-					model.addAttribute("user_firstName", user.getUser_firstName());
-					model.addAttribute("user_lastName", user.getUser_lastName());
-					return "user/activatemyaccount";
 				}
 			} else {
 				if (user.getRole().equalsIgnoreCase("supplier")) {
+					Long user_id = user.getUser_id();
+					List<Product> productList = productDao.getProductBySupplierId(user_id);
+					model.addAttribute("productList", productList);
+					model.addAttribute("email", principal.getName());
+					model.addAttribute("user_firstName", user.getUser_firstName());
+					model.addAttribute("user_firstName", user.getSupplier_brandName());
 					return "supplier/index";
 				}
 
 			}
-		} else {
+		} else
+
+		{
 			List<Reviews> list = reviewsDao.getAllReviews();
 			List<Reviews> list1 = new ArrayList<Reviews>();
 			for (Reviews r : list) {

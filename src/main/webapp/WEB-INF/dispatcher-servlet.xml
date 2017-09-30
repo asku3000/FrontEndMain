@@ -16,7 +16,7 @@
 	<!-- declare mvc to be annotation driven -->
 	<mvc:annotation-driven />
 	<context:annotation-config />
-	
+
 	<!-- to mapp the resources folder -->
 	<mvc:resources location="/resources/" mapping="/resources/**" />
 
@@ -32,6 +32,8 @@
 		<!-- here the id is mapped to invoke this flow -->
 		<webflow:flow-location id="registration"
 			path="/registrationFlow.xml" />
+		<webflow:flow-location id="sellerregistration"
+			path="/sellerregistrationflow.xml" />
 	</webflow:flow-registry>
 
 	<webflow:flow-builder-services id="flowBuilderServices"
@@ -63,4 +65,7 @@
 		<property name="flowRegistry" ref="flowRegistry" />
 		<property name="order" value="0" />
 	</bean>
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 </beans>

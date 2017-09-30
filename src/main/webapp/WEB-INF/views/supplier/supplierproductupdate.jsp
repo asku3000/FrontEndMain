@@ -80,7 +80,7 @@
 					alt="Unable To Load" class="image-responsive" />
 			</div>
 			<div class="col-md-6" style="background: #ECF0F1;">
-				<form action="${context}/admin/updateproduct" method="get">
+				<form action="${context}/supplier/BySupplierupdateproduct" method="get">
 					<input type="hidden" name="product_Id"
 						value="${product.product_Id}" /> <label>Name<span
 						class="text-danger">*</span> :
