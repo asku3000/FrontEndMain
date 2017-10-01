@@ -1,9 +1,14 @@
 package com.niit.ecommerce.FrontEndMain.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.niit.ecommerce.Backend.dao.CartDao;
 import com.niit.ecommerce.Backend.dao.CartItemDao;
@@ -51,8 +57,9 @@ public class SupplierController {
 	User user1;
 	Cart cart;
 	CartItem cartItem;
-
 	Reviews reviews;
+
+	private static final String UPLOAD_DIRECTORY = "resources/Images";
 
 	@RequestMapping(value = { "/supplierdecide1" })
 	public String supplierDecide() {
@@ -119,6 +126,14 @@ public class SupplierController {
 			@RequestParam("product_description") String product_description,
 			@RequestParam("product_price") Long product_price, @RequestParam("product_quantity") int product_quantity,
 			Principal principal, Model map, HttpServletRequest request) {
+		product_author = product_author.trim();
+		product_author = product_author.toLowerCase();
+		product_bookName = product_bookName.trim();
+		product_bookName = product_bookName.toLowerCase();
+		product_description = product_description.toLowerCase().trim();
+
+		product_publisher = product_publisher.trim();
+		product_publisher = product_publisher.toLowerCase();
 
 		user = userDao.getUserByUsername(principal.getName());
 		String refer = request.getHeader("Referer");
@@ -193,7 +208,7 @@ public class SupplierController {
 		return "null";
 	}
 
-	@RequestMapping(value = { "/supplier/supplieruploadproduct1" },method = RequestMethod.POST)
+	@RequestMapping(value = { "/supplier/supplieruploadproduct1" }, method = RequestMethod.POST)
 	public String supplieruploadProducts1(@RequestParam("product_bookName") String product_bookName,
 			@RequestParam("product_author") String product_author,
 			@RequestParam("product_publisher") String product_publisher,
@@ -209,9 +224,18 @@ public class SupplierController {
 			map.addAttribute("user_lastName", user.getUser_lastName());
 
 			product = new Product();
-			
+			product_author = product_author.trim();
+			product_author = product_author.toLowerCase();
+			product_bookName = product_bookName.trim();
+			product_bookName = product_bookName.toLowerCase();
+			product_description = product_description.toLowerCase().trim();
+			product_language = product_language.trim();
+			product_language = product_language.toLowerCase();
+			product_publisher = product_publisher.trim();
+			product_publisher = product_publisher.toLowerCase();
+			product_status = product_status.trim().toLowerCase();
 			category = categoryDao.getCategoryByCategory_level(category_level);
-			System.out.println("hello"+category.toString());
+			System.out.println("hello" + category.toString());
 			product.setCategory(category);
 			product.setProduct_activeIs(true);
 			product.setProduct_author(product_author);
@@ -241,5 +265,63 @@ public class SupplierController {
 		}
 
 		return "null";
+	}
+
+	/*
+	 * @RequestMapping("/uploadImage") public String upload() { return
+	 * "uploadImage"; }
+	 */
+
+	@RequestMapping(value = "/supplier/savefile", method = RequestMethod.POST)
+	public String saveimage(Model map, @RequestParam CommonsMultipartFile file, @RequestParam("pid") Long pid,
+			HttpSession session, Principal p, HttpServletRequest req) throws Exception {
+		String refer = req.getHeader("Referer");
+		user = userDao.getUserByUsername(p.getName());
+		ServletContext context = session.getServletContext();
+		String path = context.getRealPath(UPLOAD_DIRECTORY) + "\\" + user.getSupplier_companyName() + "_"
+				+ user.getSupplier_brandName() + "_" + user.getUser_id();
+		File dir = new File(path);
+		if (dir.exists()) {
+			product = productDao.getProductById(pid);
+			String filename = file.getOriginalFilename();
+			filename = product.getProduct_bookName() + filename;
+			String imgpath = "/resources/Images/" + user.getSupplier_companyName() + "_" + user.getSupplier_brandName()
+					+ "_" + user.getUser_id() + "/" + filename;
+
+			// TO SAVE IMAGE TO LOCATION
+			byte[] bytes = file.getBytes();
+
+			BufferedOutputStream stream = new BufferedOutputStream(
+					new FileOutputStream(new File(path + File.separator + filename)));
+			stream.write(bytes);
+			stream.flush();
+			stream.close();
+
+			product.setProduct_imgUrl(imgpath);
+			productDao.update(product);
+			map.addAttribute("err", "Product Successfully Added....");
+			return "supplier/productadded";
+		} else {
+			dir.mkdir();
+			product = productDao.getProductById(pid);
+			String filename = file.getOriginalFilename();
+			filename = product.getProduct_bookName() + filename;
+			String imgpath = "/resources/Images/" + user.getSupplier_companyName() + "_" + user.getSupplier_brandName()
+					+ "_" + user.getUser_id() + "/" + filename;
+			// System.out.println(imgpath);
+
+			// TO SAVE IMAGE TO LOCATION
+			byte[] bytes = file.getBytes();
+			BufferedOutputStream stream = new BufferedOutputStream(
+					new FileOutputStream(new File(path + File.separator + filename)));
+			stream.write(bytes);
+			stream.flush();
+			stream.close();
+
+			product.setProduct_imgUrl(imgpath);
+			productDao.update(product);
+			map.addAttribute("err", "Product Successfully Added....");
+			return "supplier/productadded";
+		}
 	}
 }

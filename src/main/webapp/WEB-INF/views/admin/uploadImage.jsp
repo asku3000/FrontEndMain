@@ -24,24 +24,21 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<form:form method="post" action="savefile"
+	<form:form method="post" action="savefile1"
 		enctype="multipart/form-data">
 		<input type="hidden" name="pid" value="${prod_id}" />
-		<p><br>
-		<br>
-		<br>
-			<label for="image" style="margin-left: 43%;">Choose Image</label>
+		<p>
+			<br> <br> <br> <label for="image"
+				style="margin-left: 43%;">Choose Image</label>
 		</p>
 		<p>
-		<br>
-		<br>
-			<input name="file" style="margin-left: 43%;" id="fileToUpload" type="file" />
+			<br> <br> <input name="file" style="margin-left: 43%;"
+				id="fileToUpload" type="file" />
 		</p>
 		<br />
 		<p>
-		<br>
-		<br>
-			<input type="submit" style="margin-left: 43%;" class="btn btn-success" value="Upload">
+			<br> <br> <input type="submit" style="margin-left: 43%;"
+				class="btn btn-success" value="Upload">
 		</p>
 	</form:form>
 	<jsp:include page="footer.jsp" />

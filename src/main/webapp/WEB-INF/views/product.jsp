@@ -26,8 +26,8 @@
 }
 
 .imgcont img {
-	width: 340px;
-	height: 320px;
+	width: 320px;
+	height: 300px;
 }
 </style>
 </head>

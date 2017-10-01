@@ -64,7 +64,7 @@ public class SaveImage {
 		return "uploadImage";
 	}
 
-	@RequestMapping(value = "/supplier/savefile", method = RequestMethod.POST)
+	@RequestMapping(value = "savefile", method = RequestMethod.POST)
 	public String saveimage(Model map, @RequestParam CommonsMultipartFile file, @RequestParam("pid") Long pid,
 			HttpSession session, Principal p, HttpServletRequest req) throws Exception {
 		String refer = req.getHeader("Referer");
@@ -116,4 +116,5 @@ public class SaveImage {
 			return "supplier/productadded";
 		}
 	}
+
 }
