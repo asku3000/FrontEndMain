@@ -136,11 +136,10 @@
 											class="glyphicon icon-rotate icon-flipped glyphicon-play"></span>
 										Continue Shopping
 									</button></a></td>
-							<td>
-								<button type="button" class="btn btn-success">
-									Checkout <span class="glyphicon glyphicon-play"></span>
-								</button>
-							</td>
+							<td><a href="${context}/checkoutData"
+								class="btn btn-success"> Checkout <span
+									class="glyphicon glyphicon-play"></span>
+									</button></td>
 						</tr>
 					</tbody>
 				</table>

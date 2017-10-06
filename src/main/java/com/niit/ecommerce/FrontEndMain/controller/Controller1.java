@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.niit.ecommerce.Backend.dao.CartDao;
 import com.niit.ecommerce.Backend.dao.CartItemDao;
 import com.niit.ecommerce.Backend.dao.CategoryDao;
+import com.niit.ecommerce.Backend.dao.PaymentDao;
 import com.niit.ecommerce.Backend.dao.ProductDao;
 import com.niit.ecommerce.Backend.dao.ReviewsDao;
 import com.niit.ecommerce.Backend.dao.UserDao;
 import com.niit.ecommerce.Backend.entity.Cart;
 import com.niit.ecommerce.Backend.entity.CartItem;
 import com.niit.ecommerce.Backend.entity.Category;
+import com.niit.ecommerce.Backend.entity.Payment;
 import com.niit.ecommerce.Backend.entity.Product;
 import com.niit.ecommerce.Backend.entity.Reviews;
 import com.niit.ecommerce.Backend.entity.User;
@@ -48,12 +50,16 @@ public class Controller1 {
 	@Autowired
 	ReviewsDao reviewsDao;
 
+	@Autowired
+	PaymentDao payementDao;
+
 	Category category;
 	Product product;
 	User user;
 	Cart cart;
 	CartItem cartItem;
 	Reviews reviews;
+	Payment payment;
 
 	@RequestMapping(value = { "/", "/index", "/home" })
 	public String index(Principal principal, Model model) {
@@ -789,6 +795,14 @@ public class Controller1 {
 
 		}
 		return "redirect:" + refer;
+	}
+
+	// It's for providing User id to web flow in checkout
+	@RequestMapping("/checkoutData")
+	public String getCheckout(Principal principal) {
+		user = userDao.getUserByUsername(principal.getName());
+		System.out.println("Hello From Checkout" + user.getUser_id());
+		return "redirect:/checkout?user_id=" + user.getUser_id();
 	}
 
 }
